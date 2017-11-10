@@ -1,0 +1,55 @@
+# Welcome to Serverless!
+# For full config options, check the docs:
+#    docs.serverless.com
+# # # # # # # # # # # # # # ## # # # # # # # # # # # # # # #
+# See readme for proceedure on using this template for lambda deployment
+## # # # # # # # # # # # # # ## # # # # # # # # # # # # # #
+custom:
+  config: ${file(./resources/shared-variables.yml)}
+
+service: ${self:custom.config.project}-${self:custom.config.serviceName}
+# frameworkVersion: "=X.X.X"
+
+provider:
+  name: aws
+  runtime: #set me: nodejs4.3, nodejs6.10, java8
+#override with --stage cli param
+  stage: ${opt:stage, self:custom.config.stage}
+#override with --region cli param
+  region: ${opt:region, self:custom.config.region}
+  memorySize: 128
+  timeout: 30
+  deploymentBucket: ${self:custom.config.s3Bucket}
+
+  #Runtime configuration supplied by dynamic serverless variables
+  #environment:
+
+# add packaging information here to control what is put into zip
+package:
+  exclude:
+    - features/**
+    - variables/**
+    - cloudformation/**
+    - spec/**
+    - .idea/**
+    - "*.iml"
+  # Use artifact for java projects see https://serverless.com/framework/docs/providers/aws/guide/packaging#artifact
+  artifact:
+
+functions:
+  FunctionOne:
+    handler: ${self:custom.config.handler}
+    name: ${self:custom.config.functionOneName}-${opt:stage, self:provider.stage}
+    description: ${self:custom.config.description}
+    vpc:
+      securityGroupIds: ${self:custom.config.dynamic.sgs}
+      subnetIds: ${self:custom.config.dynamic.sns}
+
+# add CloudFormation resource templates here
+resources:
+  Resources:
+    FunctionOneLogGroup:
+      Type: AWS::Logs::LogGroup
+      DeletionPolicy: Delete
+      Properties:
+        RetentionInDays: 30

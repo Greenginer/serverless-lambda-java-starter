@@ -1,0 +1,5 @@
+vpcid: vpc-<id>
+sns:
+  - subnet-<id>
+sgs:
+  - sg-<id>

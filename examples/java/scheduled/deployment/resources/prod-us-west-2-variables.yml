@@ -1,0 +1,5 @@
+vpcid: vpc-<id>
+securityGrpId:
+  - sg-<id>
+sns:
+  - subnet-<id>

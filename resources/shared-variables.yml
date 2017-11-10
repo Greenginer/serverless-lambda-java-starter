@@ -1,0 +1,14 @@
+#Required
+project: serverless-starter
+serviceName: examples
+description: serverless java template project
+stage: dev
+region: us-west-2
+s3Bucket: deploy
+
+handler: git.greenginer.scheduled.handler.aws.ScheduledFunctionHandler
+functionOneName: ${self:custom.config.project}-ScheduledLambda
+
+#This will use the the values provides as CLI options or default values specific above if no option was present
+#At a minimum a dynamic variable file named 'dev-us-west-2-variables.yml' must exist
+dynamic: ${file(./resources/${opt:stage, self:provider.stage}-${opt:region, self:provider.region}-variables.yml)}

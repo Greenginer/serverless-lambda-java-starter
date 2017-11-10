@@ -1,0 +1,10 @@
+#This is a stage + region specific configuration file this an ideal place to put account specific settings
+
+#These resources are managed separately as they do not clean up very well if included in the same cloudformation stack
+#as the lambda and can mess up your stack when doing updates
+vpcid: vpc-<id>
+sns:
+  - subnet-<id>
+  - subnet-<id>
+sgs:
+  - sg-<id>
